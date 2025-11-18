@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Temporarily Unavailable - VML China Toolkit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f7fb;
+      color: #1f2933;
+      
+      /* 主色 */
+      --primary: #2563eb;
+      --primary-soft: #3b82f6;
+      --primary-dark: #1d4ed8;
+      --primary-light: rgba(37, 99, 235, 0.1);
+      
+      /* 文本 */
+      --text-primary: #1f2933;
+      --text-secondary: #52606d;
+      --text-tertiary: #475569;
+      --text-muted: #94a3b8;
+      
+      /* 背景 */
+      --bg-primary: #f5f7fb;
+      --bg-white: #ffffff;
+      --bg-light: #f8fafc;
+      
+      /* 边框 */
+      --border-default: #d9e2ec;
+      --border-active: #2563eb;
+      
+      /* 阴影 */
+      --shadow-sm: 0 6px 12px rgba(37, 99, 235, 0.15);
+      --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.05);
+      --shadow-lg: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .error-container {
+      max-width: 600px;
+      width: 100%;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-items: center;
+      text-align: center;
+    }
+
+    .error-panel {
+      background: var(--bg-white);
+      border-radius: 1rem;
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+      border: 1px solid var(--border-default);
+    }
+
+    .error-icon {
+      font-size: 4rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .error-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .error-message {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .countdown-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      padding: 1.5rem;
+      background: var(--bg-light);
+      border-radius: 0.75rem;
+      border: 1px solid var(--border-default);
+    }
+
+    .countdown-text {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .countdown-timer {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      border: none;
+      border-radius: 0.6rem;
+      padding: 0.65rem 1.15rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .button.primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+    }
+
+    .button.primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .button.secondary {
+      background: #e4e7eb;
+      color: var(--text-primary);
+    }
+
+    .button.secondary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 12px rgba(37, 99, 235, 0.15);
+    }
+
+    .button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      .error-container {
+        padding: 1rem;
+      }
+
+      .error-panel {
+        padding: 2rem 1.5rem;
+      }
+
+      .error-title {
+        font-size: 1.5rem;
+      }
+
+      .countdown-timer {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <div class="error-panel">
+      <div class="error-icon">⚠️</div>
+      <h1 class="error-title">Service Temporarily Unavailable</h1>
+      <p class="error-message">
+        The server is currently experiencing temporary issues. Please try again later.
+      </p>
+      
+      <div class="countdown-section">
+        <p class="countdown-text">This page will automatically reload in:</p>
+        <div class="countdown-timer" id="countdown">60</div>
+      </div>
+
+      <div class="actions">
+        <button class="button primary" id="reloadBtn" onclick="reloadPage()">
+          Reload Now
+        </button>
+        <a href="/" class="button secondary">
+          Go to Home
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configuration: Countdown time in seconds (default: 60)
+    const COUNTDOWN_SECONDS = 60;
+
+    let countdown = COUNTDOWN_SECONDS;
+    const countdownElement = document.getElementById('countdown');
+    const reloadBtn = document.getElementById('reloadBtn');
+    let countdownInterval;
+
+    function updateCountdown() {
+      countdownElement.textContent = countdown;
+      
+      if (countdown <= 0) {
+        clearInterval(countdownInterval);
+        reloadPage();
+        return;
+      }
+      
+      countdown--;
+    }
+
+    function reloadPage() {
+      // Reload the current page immediately
+      window.location.reload();
+    }
+
+    // Initial display
+    countdownElement.textContent = countdown;
+    
+    // Start countdown (update every second)
+    countdownInterval = setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
+

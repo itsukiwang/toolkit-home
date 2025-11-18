@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VML China Toolkit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f7fb;
+      color: #1f2933;
+      
+      /* 主色 */
+      --primary: #2563eb;
+      --primary-soft: #3b82f6;
+      --primary-dark: #1d4ed8;
+      --primary-light: rgba(37, 99, 235, 0.1);
+      
+      /* 文本 */
+      --text-primary: #1f2933;
+      --text-secondary: #52606d;
+      --text-tertiary: #475569;
+      --text-muted: #94a3b8;
+      
+      /* 背景 */
+      --bg-primary: #f5f7fb;
+      --bg-white: #ffffff;
+      --bg-light: #f8fafc;
+      
+      /* 边框 */
+      --border-default: #d9e2ec;
+      --border-active: #2563eb;
+      
+      /* 阴影 */
+      --shadow-sm: 0 6px 12px rgba(37, 99, 235, 0.15);
+      --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.05);
+      --shadow-lg: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .app-shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .app-header {
+      position: relative;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .app-header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .app-header p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .language-switcher {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      gap: 0.5rem;
+      background: var(--bg-white);
+      border: 1px solid var(--border-default);
+      border-radius: 0.6rem;
+      padding: 0.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .language-switcher button {
+      background: transparent;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .language-switcher button:hover {
+      background: var(--bg-light);
+    }
+
+    .language-switcher button.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .banner-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .banner-card {
+      background: var(--bg-white);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, height 0.2s ease;
+      cursor: pointer;
+      height: 180px;
+      border: 1px solid var(--border-default);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .banner-card:hover:not(.empty) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      height: auto;
+      min-height: 180px;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      overflow: visible;
+    }
+
+    .banner-card.empty {
+      background: var(--bg-light);
+      border: 1px dashed var(--border-default);
+      cursor: default;
+      opacity: 0.6;
+    }
+
+    .banner-card.empty::after {
+      content: attr(data-empty-text);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .banner-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      position: relative;
+    }
+
+    .banner-badge {
+      position: absolute;
+      top: -18px;
+      right: -18px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 10px;
+      line-height: 1.2;
+    }
+
+    .banner-badge.beta {
+      background: rgba(37, 99, 235, 0.1);
+      color: #1d4ed8;
+    }
+
+    .banner-badge.wip {
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+    }
+
+    .banner-badge.queue {
+      background: rgba(107, 114, 128, 0.1);
+      color: #6b7280;
+    }
+
+    .banner-title {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .banner-card:hover:not(.empty) .banner-title {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+    }
+
+    .banner-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .banner-description {
+      font-size: 0.95rem;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-word;
+      flex: 1;
+      max-height: calc(1.6em * 2);
+    }
+
+    .banner-card:hover:not(.empty) .banner-description {
+      display: block;
+      -webkit-line-clamp: unset;
+      -webkit-box-orient: unset;
+      overflow: visible;
+      max-height: none;
+    }
+
+    .banner-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      height: 180px;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .app-shell {
+        padding: 1rem;
+      }
+
+      .app-header {
+        padding-top: 3rem;
+      }
+
+      .language-switcher {
+        top: -0.5rem;
+        right: 0;
+      }
+
+      .banner-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="language-switcher">
+        <button id="lang-en" class="active" data-lang="en">EN</button>
+        <button id="lang-zh" data-lang="zh">中</button>
+      </div>
+      <h1>VML China Toolkit</h1>
+      <p data-i18n="subtitle">Tool Collection</p>
+    </header>
+
+    <div class="banner-grid">
+      <!-- Banner 1: PPTTT -->
+      <a href="/ppttt/" class="banner-link">
+        <div class="banner-card">
+          <div class="banner-header">
+            <h2 class="banner-title" data-i18n="ppttt-title">PPT Translation Tool</h2>
+            <p class="banner-subtitle">PPTTT</p>
+            <span class="banner-badge beta" data-i18n="ppttt-badge">beta released</span>
+          </div>
+          <p class="banner-description" data-i18n="ppttt-description">
+            Professional PowerPoint translation tool with multi-language support and format preservation.
+          </p>
+        </div>
+      </a>
+
+      <!-- Banner 2: I2PPTT -->
+      <a href="/i2pptt/" class="banner-link">
+        <div class="banner-card">
+          <div class="banner-header">
+            <h2 class="banner-title" data-i18n="i2pptt-title">Images to PPT Tool</h2>
+            <p class="banner-subtitle">I2PPTT</p>
+            <span class="banner-badge wip" data-i18n="i2pptt-badge">work in process</span>
+          </div>
+          <p class="banner-description" data-i18n="i2pptt-description">
+            Merge batch images with rule-based naming into PowerPoint according to naming rules.
+          </p>
+        </div>
+      </a>
+
+      <!-- Banner 3: POREH -->
+      <a href="/poreh/" class="banner-link">
+        <div class="banner-card">
+          <div class="banner-header">
+            <h2 class="banner-title" data-i18n="poreh-title">PO Request Email Helper</h2>
+            <p class="banner-subtitle">POREH</p>
+            <span class="banner-badge queue" data-i18n="poreh-badge">in queue</span>
+          </div>
+          <p class="banner-description" data-i18n="poreh-description">
+            Assist in generating standard purchase request emails and verify the validity of related supporting documents.
+          </p>
+        </div>
+      </a>
+
+      <!-- Banner 4-8: Empty -->
+      <div class="banner-card empty" data-empty-text="Coming Soon"></div>
+      <div class="banner-card empty" data-empty-text="Coming Soon"></div>
+      <div class="banner-card empty" data-empty-text="Coming Soon"></div>
+      <div class="banner-card empty" data-empty-text="Coming Soon"></div>
+      <div class="banner-card empty" data-empty-text="Coming Soon"></div>
+    </div>
+  </div>
+
+  <script>
+    // Language translations
+    const translations = {
+      en: {
+        'subtitle': 'Tool Collection',
+        'ppttt-title': 'PPT Translation Tool',
+        'ppttt-description': 'Professional PowerPoint translation tool with multi-language support and format preservation.',
+        'ppttt-badge': 'beta released',
+        'i2pptt-title': 'Images to PPT Tool',
+        'i2pptt-description': 'Merge batch images with rule-based naming into PowerPoint according to naming rules.',
+        'i2pptt-badge': 'work in process',
+        'poreh-title': 'PO Request Email Helper',
+        'poreh-description': 'Assist in generating standard purchase request emails and verify the validity of related supporting documents.',
+        'poreh-badge': 'in queue',
+        'empty-text': 'Coming Soon'
+      },
+      zh: {
+        'subtitle': '工具集合',
+        'ppttt-title': 'PPT 翻译工具',
+        'ppttt-description': '专业的 PowerPoint 翻译工具，支持多语言翻译和格式保持。',
+        'ppttt-badge': '测试版',
+        'i2pptt-title': '图片转 PPT 工具',
+        'i2pptt-description': '用于将有规则命名的批量图片按名字规则合并成ppt文档。',
+        'i2pptt-badge': '开发中',
+        'poreh-title': '采购申请邮件助手',
+        'poreh-description': '协助生成标准的采购申请邮件，并检查相关证明文件是否有效。',
+        'poreh-badge': '排队中',
+        'empty-text': '即将推出'
+      }
+    };
+
+    // Get saved language or default to English
+    let currentLang = localStorage.getItem('language') || 'en';
+
+    // Initialize language
+    function initLanguage() {
+      updateLanguage(currentLang);
+      updateLanguageButtons(currentLang);
+    }
+
+    // Update language
+    function updateLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      
+      // Update all elements with data-i18n attribute
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+
+      // Update empty banner texts
+      document.querySelectorAll('.banner-card.empty').forEach(element => {
+        element.setAttribute('data-empty-text', translations[lang]['empty-text']);
+      });
+
+      // Save to localStorage
+      localStorage.setItem('language', lang);
+    }
+
+    // Update language button states
+    function updateLanguageButtons(lang) {
+      document.querySelectorAll('.language-switcher button').forEach(btn => {
+        if (btn.getAttribute('data-lang') === lang) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // Language switcher event listeners
+    document.querySelectorAll('.language-switcher button').forEach(button => {
+      button.addEventListener('click', () => {
+        const lang = button.getAttribute('data-lang');
+        updateLanguage(lang);
+        updateLanguageButtons(lang);
+      });
+    });
+
+    // Initialize on page load
+    initLanguage();
+  </script>
+</body>
+</html>
+
